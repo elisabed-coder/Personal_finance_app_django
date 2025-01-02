@@ -14,6 +14,7 @@ class Budget(models.Model):
         ('shopping', 'Shopping'),
         ('general', 'General'),
     ]
+
     THEME_CHOICES = [
         ('#FF6B6B', 'Coral Red'),
         ('#4ECDC4', 'Turquoise'),
@@ -29,7 +30,7 @@ class Budget(models.Model):
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     category=models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     theme_color = models.CharField(max_length=255, choices=THEME_CHOICES)
-    maximum_spend = models.charField(max_digits=10)
+    maximum_spend = models.IntegerField(max_digits=10)
     creaated_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     def __str__(self) -> str:
