@@ -1,7 +1,7 @@
 from django.urls import path
-
-from finance_app_backend2.urls import urlpatterns
+from budget.views import BudgetCreateView,BudgetChoicesView
 
 urlpatterns = [
-    path('')
+    path('create_budget/', BudgetCreateView.as_view(), name='create_budget'),
+    path('budgets/choices/', BudgetChoicesView.as_view(), name='budget-choices'),
 ]

@@ -11,6 +11,11 @@ from datetime import datetime, timedelta
 import hashlib
 import uuid
 from django.utils import timezone
+from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework_simplejwt.exceptions import InvalidToken
+from django.contrib.auth import authenticate
+
+
 
 SALT = "07347bcc6e0f8eea361045436481d875"
 URL = "http://localhost:5173"
@@ -199,6 +204,7 @@ class LoginView(APIView):
             )
         else:
             return Response(
-                {"success": True, "message": "You are now logged in!"},
+                {"success": True, "message": "You are now logged in!",
+},
                 status=status.HTTP_200_OK,
             )

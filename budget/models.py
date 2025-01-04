@@ -25,13 +25,13 @@ class Budget(models.Model):
         ('#9370DB', 'Purple'),
         ('#3CB371', 'Forest Green')
     ]
-
     id=models.AutoField(primary_key=True)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
     category=models.CharField(max_length=255, choices=CATEGORY_CHOICES)
     theme_color = models.CharField(max_length=255, choices=THEME_CHOICES)
-    maximum_spend = models.IntegerField(max_digits=10)
-    creaated_at = models.DateTimeField(auto_now_add=True)
+    maximum_spend = models.CharField(max_length=10)
+    created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+
     def __str__(self) -> str:
         return f"{self.user.name}'s Budget for {self.category}"
