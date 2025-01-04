@@ -35,6 +35,6 @@ class BudgetCreateView(APIView):
             for key in serializer.errors:
                 error_msg += serializer.errors[key][0]
             return Response(
-                {"success": False, "message": error_msg},
+                {"success": False, "message": serializer.errors},
                 status=status.HTTP_400_BAD_REQUEST,
             )
