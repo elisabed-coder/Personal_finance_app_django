@@ -63,3 +63,32 @@ class BudgetCreateView(APIView):
                 {"success": False, "message": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )
+
+class BudgetsView(APIView):
+    def get(self, request):
+        user_email = request.query_params.get('user_email')  # You can pass the user_email as a query parameter
+
+        if not user_email:
+            return Response(
+                {"success": False, "message": "User email is required"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user = User.objects.filter(email__iexact=user_email).first()
+        if not user:
+            return Response({"success": False, "message": "User not found"},)
+
+        budgets = Budget.objects.filter(user__id=user.id)
+
+        if not budgets:
+            return Response(
+                {"success": False, "message": "No budgets found for this user"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        serializer = BudgetSerializer(budgets, many=True)
+
+        return Response(
+            {"success": True, "budgets": serializer.data},
+            status=status.HTTP_200_OK
+        )
