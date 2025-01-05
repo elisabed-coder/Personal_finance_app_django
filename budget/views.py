@@ -1,10 +1,15 @@
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Budget
 from .serializers import BudgetSerializer
+import logging
+from api.models import User
 
+logger = logging.getLogger(__name__)
+
+SALT = "43b1e54d90aaf2e1a6a13a7a7de60f7d"
+URL = "http://localhost:5173"
 
 class BudgetChoicesView(APIView):
     def get(self, request):
@@ -12,29 +17,49 @@ class BudgetChoicesView(APIView):
             'categories': Budget.CATEGORY_CHOICES,
             'theme_colors': Budget.THEME_CHOICES
         })
+
 class BudgetCreateView(APIView):
-    permission_classes = [IsAuthenticated]
-
     def post(self, request, format=None):
-        data = {
-            "user": request.user.id,
-            "category": request.data["category"],
-            "maximum_spend": request.data["maximum_spend"],
-            "theme_color": request.data["theme"]
-        }
-        serializer = BudgetSerializer(data=data)
+        user_email = request.data.get('api_user')
 
-        if serializer.is_valid():
-            serializer.save()
+        if not user_email:
             return Response(
-                {"success": True, "message": "Budget created successfully!"},
-                status=status.HTTP_201_CREATED,
+                {"success": False, "message": "User email is required"},
+                status=status.HTTP_400_BAD_REQUEST
             )
-        else:
-            error_msg = ""
-            for key in serializer.errors:
-                error_msg += serializer.errors[key][0]
+
+        user = User.objects.filter(email__iexact=user_email).first()
+
+        if not user:
+            return Response(
+                {"success": False, "message": "User not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+        try:
+            data = {
+                "user": user.id,  # Ensure the user instance is passed here
+                "category": request.data.get("category"),
+                "maximum_spend": request.data.get("maximum_spend"),
+                "theme_color": request.data.get("theme_color")
+            }
+
+            serializer = BudgetSerializer(data=data)
+
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    {"success": True, "message": "Budget created successfully!"},
+                    status=status.HTTP_201_CREATED
+                )
+
             return Response(
                 {"success": False, "message": serializer.errors},
-                status=status.HTTP_400_BAD_REQUEST,
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        except Exception as e:
+            return Response(
+                {"success": False, "message": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
             )

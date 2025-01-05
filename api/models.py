@@ -16,6 +16,10 @@ class User(models.Model):
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=255)
 
+
+    class Meta:
+        db_table = 'api_user'
+
     def __str__(self) -> str:
         return self.name
 

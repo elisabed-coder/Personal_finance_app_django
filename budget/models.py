@@ -33,5 +33,8 @@ class Budget(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        db_table = 'budget_budget'
+
     def __str__(self) -> str:
         return f"{self.user.name}'s Budget for {self.category}"

@@ -17,7 +17,7 @@ from django.contrib.auth import authenticate
 
 
 
-SALT = "07347bcc6e0f8eea361045436481d875"
+SALT = "43b1e54d90aaf2e1a6a13a7a7de60f7d"
 URL = "http://localhost:5173"
 
 
@@ -204,7 +204,14 @@ class LoginView(APIView):
             )
         else:
             return Response(
-                {"success": True, "message": "You are now logged in!",
-},
+                {
+                    "success": True,
+                    "message": "You are now logged in!",
+                    "name": user.name,
+                    "is_authenticated": True,  # Indicate the user is authenticated
+                    "user_id": user.id,
+
+                },
+
                 status=status.HTTP_200_OK,
             )
