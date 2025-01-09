@@ -7,13 +7,9 @@ from rest_framework.views import APIView
 from .models import User, Token
 from .serializers import UserSerializer, TokenSerializer
 from django.conf import settings
-from datetime import datetime, timedelta
 import hashlib
 import uuid
 from django.utils import timezone
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework_simplejwt.exceptions import InvalidToken
-from django.contrib.auth import authenticate
 
 
 

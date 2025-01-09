@@ -79,16 +79,16 @@ class BudgetsView(APIView):
             return Response({"success": False, "message": "User not found"},)
 
         budgets = Budget.objects.filter(user__id=user.id)
-
-        if not budgets:
-            return Response(
-                {"success": False, "message": "No budgets found for this user"},
-                status=status.HTTP_404_NOT_FOUND
-            )
-
         serializer = BudgetSerializer(budgets, many=True)
 
         return Response(
-            {"success": True, "budgets": serializer.data},
+            {
+                "success": True,
+                "budgets": serializer.data
+            },
             status=status.HTTP_200_OK
         )
+
+
+
+
