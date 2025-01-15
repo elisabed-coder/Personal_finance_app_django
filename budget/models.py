@@ -36,5 +36,11 @@ class Budget(models.Model):
     class Meta:
         db_table = 'budget_budget'
 
+
+    def save(self, *args, **kwargs):
+        if self.category:
+            self.category = self.category.capitalize()
+        super().save(*args, **kwargs)
+
     def __str__(self) -> str:
         return f"{self.user.name}'s Budget for {self.category}"
