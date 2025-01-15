@@ -16,14 +16,14 @@ class Budget(models.Model):
     ]
 
     THEME_CHOICES = [
-        ('#FF6B6B', 'Coral Red'),
-        ('#4ECDC4', 'Turquoise'),
-        ('#45B7D1', 'Sky Blue'),
-        ('#96CEB4', 'Sage Green'),
-        ('#FFEEAD', 'Soft Yellow'),
-        ('#D4A5A5', 'Dusty Rose'),
-        ('#9370DB', 'Purple'),
-        ('#3CB371', 'Forest Green')
+        ('#394a51', 'Charcoal Gray'),
+        ('#7fa99b', 'Seafoam Green'),
+        ('#fbf2d5', 'Light Cream'),
+        ('#fdc57b', 'Goldenrod'),
+        ('#fad662', 'Light Yellow'),
+        ('#e57b5c', 'Coral'),
+        ('#be4747', 'Burgundy'),
+        ('#ffb6b9', 'Light Pink')
     ]
     id=models.AutoField(primary_key=True)
     user=models.ForeignKey(User, on_delete=models.CASCADE)
