@@ -90,5 +90,32 @@ class BudgetsView(APIView):
         )
 
 
+class DeleteBudget(APIView):
+    def get(self, request):
+        budget_id = request.query_params.get('budget_id')
+        if not budget_id:
+            return Response(
+                {"success": False, "message": "Budget id is required"},
+                status=status.HTTP_400_BAD_REQUEST
 
+            )
+        try:
+            budget = Budget.objects.get(id=budget_id)
+
+            if not Budget:
+                return Response(
+                    {"success": False, "message": "Budget not found"},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+            budget.delete()
+            return Response(
+                {"success": True, "message": "Budget deleted successfully!"},
+                status=status.HTTP_200_OK
+            )
+        except Exception as e:
+            logger.error(f"Error deleting budget: {str(e)}")
+            return Response(
+                {"success": False, "message": "An error occurred while deleting the budget"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
 
