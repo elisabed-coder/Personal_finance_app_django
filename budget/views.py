@@ -91,31 +91,32 @@ class BudgetsView(APIView):
 
 
 class DeleteBudget(APIView):
-    def get(self, request):
+    def delete(self, request):
         budget_id = request.query_params.get('budget_id')
-        if not budget_id:
+        user_email = request.query_params.get('user_email')
+
+        if not budget_id or not user_email:
             return Response(
-                {"success": False, "message": "Budget id is required"},
+                {"success": False, "message": "Budget ID and user email are required."},
                 status=status.HTTP_400_BAD_REQUEST
+            )        
 
+        user = User.objects.filter(email__iexact=user_email).first()
+        if not user:
+            return Response(
+                {"success": False, "message": "User not found."},
+                status=status.HTTP_404_NOT_FOUND
             )
-        try:
-            budget = Budget.objects.get(id=budget_id)
 
-            if not Budget:
-                return Response(
-                    {"success": False, "message": "Budget not found"},
-                    status=status.HTTP_404_NOT_FOUND
-                )
+        try:
+            budget = Budget.objects.get(id=budget_id, user=user)
             budget.delete()
             return Response(
                 {"success": True, "message": "Budget deleted successfully!"},
-                status=status.HTTP_200_OK
+                status=status.HTTP_200_OK,
             )
-        except Exception as e:
-            logger.error(f"Error deleting budget: {str(e)}")
+        except Budget.DoesNotExist:
             return Response(
-                {"success": False, "message": "An error occurred while deleting the budget"},
-                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+                {"success": False, "message": "Budget not found."},
+                status=status.HTTP_404_NOT_FOUND,
             )
-
