@@ -3,16 +3,16 @@ from api.models import User
 
 class Budget(models.Model):
     CATEGORY_CHOICES = [
-        ('bills', 'Bills'),
-        ('entertainment', 'Entertainment'),
-        ('groceries', 'Groceries'),
-        ('diningout', 'Diningout'),
-        ('transportation', 'Transportation'),
-        ('personalCare', 'PersonalCare'),
-        ('education', 'Education'),
-        ('lifeStyle', 'LifeStyle'),
-        ('shopping', 'Shopping'),
-        ('general', 'General'),
+        ('Bills', 'Bills'),
+        ('Entertainment', 'Entertainment'),
+        ('Groceries', 'Groceries'),
+        ('Diningout', 'Diningout'),
+        ('Transportation', 'Transportation'),
+        ('PersonalCare', 'PersonalCare'),
+        ('Education', 'Education'),
+        ('LifeStyle', 'LifeStyle'),
+        ('Shopping', 'Shopping'),
+        ('General', 'General'),
     ]
 
     THEME_CHOICES = [
