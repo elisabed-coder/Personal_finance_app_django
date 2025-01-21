@@ -120,3 +120,46 @@ class DeleteBudget(APIView):
                 {"success": False, "message": "Budget not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
+class UpdateBudget(APIView):
+    def put(self, request):
+        user_email = request.data.get('api_user')  # Changed to match BudgetCreateView
+        budget_id = request.query_params.get('budget_id')
+
+        if not user_email or not budget_id:
+            return Response(
+                {"success": False, "message": "Budget ID and user email are required."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        try:
+            user = User.objects.filter(email__iexact=user_email).first()
+            if not user:
+                return Response(
+                    {"success": False, "message": "User not found."},
+                    status=status.HTTP_404_NOT_FOUND
+                )
+
+            budget = Budget.objects.get(id=budget_id, user=user)
+
+            data = {
+                "user": user.id,
+                **request.data
+            }
+
+            serializer = BudgetSerializer(budget, data=data, partial=True)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(
+                    {"success": True, "message": "Budget updated successfully!"},
+                    status=status.HTTP_200_OK
+                )
+            return Response(
+                {"success": False, "message": serializer.errors},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Budget.DoesNotExist:
+            return Response(
+                {"success": False, "message": "Budget not found."},
+                status=status.HTTP_404_NOT_FOUND
+            )
