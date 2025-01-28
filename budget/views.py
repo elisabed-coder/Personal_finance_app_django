@@ -78,7 +78,8 @@ class BudgetsView(APIView):
         if not user:
             return Response({"success": False, "message": "User not found"},)
 
-        budgets = Budget.objects.filter(user__id=user.id)
+        budgets = Budget.objects.filter(user=user).order_by('id')
+
         serializer = BudgetSerializer(budgets, many=True)
 
         return Response(
@@ -123,7 +124,7 @@ class DeleteBudget(APIView):
 
 class UpdateBudget(APIView):
     def put(self, request):
-        user_email = request.data.get('api_user')  # Changed to match BudgetCreateView
+        user_email = request.data.get('api_user')
         budget_id = request.query_params.get('budget_id')
 
         if not user_email or not budget_id:
@@ -141,7 +142,6 @@ class UpdateBudget(APIView):
                 )
 
             budget = Budget.objects.get(id=budget_id, user=user)
-
             data = {
                 "user": user.id,
                 **request.data
