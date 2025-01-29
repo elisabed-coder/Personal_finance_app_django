@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     "rest_framework",
     # apps
     "api",
-    "budget"
+    "budget",
+    "transactions"
 
 ]
 

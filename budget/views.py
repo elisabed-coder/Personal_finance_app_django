@@ -66,7 +66,7 @@ class BudgetCreateView(APIView):
 
 class BudgetsView(APIView):
     def get(self, request):
-        user_email = request.query_params.get('user_email')  # You can pass the user_email as a query parameter
+        user_email = request.query_params.get('user_email')
 
         if not user_email:
             return Response(
